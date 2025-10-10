@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import SimpleNotesApp from './projects/SimpleNotesApp'
+import WeatherApp from './projects/WeatherApp'
+import QuizApp from './projects/QuizApp'
+import PomodoroTimer from './projects/PomodoroTimer'
+import GifSearch from './projects/GifSearch'
 
 /**
 * Tiny hook that you can use where you need it 
@@ -26,44 +31,65 @@ const usePointerGlow = () => {
   return [status]
 }
 
+const projects = [
+  { id: 1, title: 'Simple Notes App', component: SimpleNotesApp },
+  { id: 2, title: 'Weather App', component: WeatherApp },
+  { id: 3, title: 'Quiz App', component: QuizApp },
+  { id: 4, title: 'Pomodoro Timer', component: PomodoroTimer },
+  { id: 5, title: 'GIF Search', component: GifSearch }
+]
+
+const ProjectDetail = ({ project, onBack }) => {
+  const ProjectComponent = project.component;
+  
+  return (
+    <div className="project-detail">
+      <h1 className="project-title">{project.title}</h1>
+      <div className="project-wrapper">
+        <ProjectComponent />
+      </div>
+      <button className="back-button" data-glow onClick={onBack}>
+        <span data-glow />
+        <span className="back-text">← Back to Projects</span>
+      </button>
+    </div>
+  )
+}
+
 const App = () => {
   const [status] = usePointerGlow();
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+  };
+
+  const handleBack = () => {
+    setSelectedProject(null);
+  };
+
+  if (selectedProject) {
+    return (
+      <main>
+        <ProjectDetail project={selectedProject} onBack={handleBack} />
+      </main>
+    );
+  }
+
   return (
     <main>
       <h1 className="title">
         FARHAN'S REACT PROJECTS
       </h1>
       <div className="articles-container">
-        <article data-glow>
-          <span data-glow />
-          <button data-glow>
-            <span>Simple Notes App</span>
-          </button>
-        </article>
-        <article data-glow>
-          <span data-glow />
-          <button data-glow>
-            <span>Weather App</span>
-          </button>
-        </article>
-        <article data-glow>
-          <span data-glow />
-          <button data-glow>
-            <span>Quiz App</span>
-          </button>
-        </article>
-        <article data-glow>
-          <span data-glow />
-          <button data-glow>
-            <span>Pomodoro Timer</span>
-          </button>
-        </article>
-        <article data-glow>
-          <span data-glow />
-          <button data-glow>
-            <span>GIF Search</span>
-          </button>
-        </article>
+        {projects.map((project, index) => (
+          <article key={project.id} data-glow onClick={() => handleProjectClick(project)}>
+            <span data-glow />
+            <button data-glow>
+              <span>{project.title}</span>
+            </button>
+          </article>
+        ))}
       </div>
     </main>
   )

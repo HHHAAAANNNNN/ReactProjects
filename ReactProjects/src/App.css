@@ -7,29 +7,29 @@
 }
 
 article:nth-of-type(1) {
-	--base: 80;
-	--spread: 500;
-	--outer: 1;
+  --base: 0;
+  --spread: 30;
+  --outer: 1;
 }
 article:nth-of-type(2) {
-	--base: 140;
-	--spread: 400;
-	--outer: 1;
+  --base: 60;
+  --spread: 20;
+  --outer: 1;
 }
 article:nth-of-type(3) {
-	--base: 900;
-	--spread: 450;
-	--outer: 1;
+  --base: 120;
+  --spread: 40;
+  --outer: 1;
 }
 article:nth-of-type(4) {
-	--base: 260;
-	--spread: 300;
-	--outer: 1;
+  --base: 200;
+  --spread: 60;
+  --outer: 1;
 }
 article:nth-of-type(5) {
-	--base: 290;
-	--spread: 450;
-	--outer: 1;
+  --base: 300;
+  --spread: 30;
+  --outer: 1;
 }
 
 *,
@@ -251,3 +251,363 @@ button[data-glow]:hover span {
   filter: brightness(1.5);
   color: transparent;
 }
+
+/* Project Detail Page */
+.project-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 3rem;
+}
+
+.project-title {
+  font-size: 5rem;
+  font-weight: 900;
+  margin: 0;
+  padding: 2rem;
+  color: hsl(0 0% 90%);
+  text-align: center;
+  letter-spacing: 0.02em;
+  background: linear-gradient(
+    135deg,
+    hsl(180 80% 70%),
+    hsl(260 80% 70%),
+    hsl(320 80% 70%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(30deg);
+  }
+}
+
+/* Back Button */
+.back-button {
+  --base: 0;
+  --spread: 0;
+  --size: 150;
+  position: relative;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: calc(var(--radius) * 1px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: hsl(0 0% 10%);
+  border: 2px solid hsl(0 0% 30%);
+  color: hsl(0 0% 80%);
+}
+
+/* Override glow colors for back button to be white */
+.back-button[data-glow] {
+  background-image: radial-gradient(
+    var(--spotlight-size) var(--spotlight-size) at
+    calc(var(--x, 0) * 1px)
+    calc(var(--y, 0) * 1px),
+    hsl(0 0% 100% / 0.08), transparent
+  );
+}
+
+.back-button[data-glow]::before {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
+    calc(var(--x, 0) * 1px)
+    calc(var(--y, 0) * 1px),
+    hsl(0 0% 100% / 0.6), transparent 100%
+  );
+}
+
+.back-button[data-glow]::after {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
+    calc(var(--x, 0) * 1px)
+    calc(var(--y, 0) * 1px),
+    hsl(0 0% 100% / 0.9), transparent 100%
+  );
+}
+
+.back-button > span[data-glow] {
+  background-image: radial-gradient(
+    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
+    calc(var(--x, 0) * 1px)
+    calc(var(--y, 0) * 1px),
+    hsl(0 0% 100% / 0.4), transparent 100%
+  );
+}
+
+.back-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 2rem rgba(255, 255, 255, 0.1);
+  border-color: hsl(0 0% 60%);
+}
+
+.back-button .back-text {
+  position: relative;
+  z-index: 1;
+  background-image: radial-gradient(
+    var(--spotlight-size) var(--spotlight-size) at
+    calc(var(--x, 0) * 1px)
+    calc(var(--y, 0) * 1px),
+    hsl(0 0% 100% / 0.8), transparent
+  );
+  background-color: transparent;
+  background-position: 50% 50%;
+  background-attachment: fixed;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: hsl(0 0% 80%);
+  transition: all 0.3s ease;
+}
+
+.back-button:hover .back-text {
+  color: hsl(0 0% 100%);
+  filter: brightness(1.5);
+}
+
+/* Project Content Wrapper */
+.project-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem 0;
+}
+
+.project-content {
+  background: hsl(0 0% 8%);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid hsl(0 0% 20%);
+}
+
+.project-content h2 {
+  color: hsl(0 0% 90%);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* Common Project Styles */
+.project-content input,
+.project-content textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background: hsl(0 0% 12%);
+  border: 1px solid hsl(0 0% 30%);
+  border-radius: 8px;
+  color: hsl(0 0% 90%);
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.project-content input:focus,
+.project-content textarea:focus {
+  outline: none;
+  border-color: hsl(0 0% 50%);
+}
+
+.project-content button {
+  padding: 0.75rem 1.5rem;
+  background: hsl(0 0% 20%);
+  border: 1px solid hsl(0 0% 40%);
+  border-radius: 8px;
+  color: hsl(0 0% 90%);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.project-content button:hover {
+  background: hsl(0 0% 30%);
+  border-color: hsl(0 0% 60%);
+}
+
+.empty-message {
+  color: hsl(0 0% 50%);
+  text-align: center;
+  padding: 2rem;
+  font-style: italic;
+}
+
+/* Notes App Specific */
+.notes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.note-input {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-item {
+  background: hsl(0 0% 12%);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid hsl(0 0% 25%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.note-item p {
+  margin: 0;
+  color: hsl(0 0% 80%);
+  flex: 1;
+}
+
+/* Weather & GIF Search Specific */
+.weather-container,
+.gif-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.weather-search,
+.gif-search {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.weather-info {
+  background: hsl(0 0% 12%);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid hsl(0 0% 25%);
+}
+
+.weather-info h3 {
+  color: hsl(0 0% 90%);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.weather-info .temp {
+  font-size: 3rem;
+  font-weight: bold;
+  color: hsl(180 70% 60%);
+  margin: 0.5rem 0;
+}
+
+.weather-info .condition {
+  color: hsl(0 0% 70%);
+  font-size: 1.2rem;
+}
+
+.gif-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.gif-item {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid hsl(0 0% 25%);
+}
+
+.gif-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Quiz App Specific */
+.quiz-container {
+  background: hsl(0 0% 12%);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid hsl(0 0% 25%);
+}
+
+.quiz-question h3 {
+  color: hsl(0 0% 90%);
+  font-size: 1.5rem;
+  margin: 1rem 0 2rem 0;
+}
+
+.question-header {
+  color: hsl(0 0% 60%);
+  margin-bottom: 1rem;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quiz-option {
+  padding: 1rem;
+  text-align: left;
+  width: 100%;
+}
+
+.quiz-score {
+  text-align: center;
+}
+
+.quiz-score h3 {
+  color: hsl(0 0% 90%);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.quiz-score p {
+  font-size: 1.5rem;
+  color: hsl(120 60% 60%);
+  margin-bottom: 2rem;
+}
+
+/* Pomodoro Timer Specific */
+.pomodoro-container {
+  background: hsl(0 0% 12%);
+  padding: 3rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid hsl(0 0% 25%);
+}
+
+.timer-status h3 {
+  color: hsl(0 0% 70%);
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.timer-display {
+  margin: 2rem 0;
+}
+
+.timer-text {
+  font-size: 5rem;
+  font-weight: bold;
+  color: hsl(0 0% 90%);
+  font-family: 'Courier New', monospace;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
