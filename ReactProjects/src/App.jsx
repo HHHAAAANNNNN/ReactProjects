@@ -83,12 +83,14 @@ const App = () => {
       </h1>
       <div className="articles-container">
         {projects.map((project, index) => (
-          <article key={project.id} data-glow onClick={() => handleProjectClick(project)}>
-            <span data-glow />
-            <button data-glow>
-              <span>{project.title}</span>
-            </button>
-          </article>
+          <div key={project.id} className="article-wrapper">
+            <article data-glow onClick={() => handleProjectClick(project)}>
+              <span data-glow />
+              <button data-glow>
+                <span>{project.title}</span>
+              </button>
+            </article>
+          </div>
         ))}
       </div>
     </main>

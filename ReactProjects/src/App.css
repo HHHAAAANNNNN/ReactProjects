@@ -6,27 +6,27 @@
   --size: 200;
 }
 
-article:nth-of-type(1) {
+.article-wrapper:nth-of-type(1) article {
   --base: 0;
   --spread: 30;
   --outer: 1;
 }
-article:nth-of-type(2) {
+.article-wrapper:nth-of-type(2) article {
   --base: 60;
   --spread: 20;
   --outer: 1;
 }
-article:nth-of-type(3) {
+.article-wrapper:nth-of-type(3) article {
   --base: 120;
   --spread: 40;
   --outer: 1;
 }
-article:nth-of-type(4) {
+.article-wrapper:nth-of-type(4) article {
   --base: 200;
   --spread: 60;
   --outer: 1;
 }
-article:nth-of-type(5) {
+.article-wrapper:nth-of-type(5) article {
   --base: 300;
   --spread: 30;
   --outer: 1;
@@ -38,15 +38,25 @@ article:nth-of-type(5) {
 	box-sizing: border-box;
 }
 body {
-	display: grid;
-	place-items: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 	background: hsl(0 0% 4%);
+  margin: 0;
+  padding: 0;
 }
 
 .wrapper {
 	position: relative;
+}
+
+.article-wrapper {
+  display: inline-block;
+  width: 260px;
+  height: auto;
 }
 
 article {
@@ -64,13 +74,12 @@ article {
   touch-action: none;
   transition: all 0.3s ease;
   cursor: pointer;
-  margin-bottom: 0;
 }
 
-article:hover {
+.article-wrapper:hover article {
   margin-top: -10px;
-  margin-bottom: 10px;
   width: 273px;
+  margin-left: -6.5px;
   box-shadow: 0 2rem 3rem -1rem rgba(0, 0, 0, 0.5);
   filter: brightness(1.1);
 }
@@ -80,9 +89,11 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 2400ch;
+  width: 100%;
   max-width: calc(100vw - 2rem);
   position: relative;
+  padding: 2rem 1rem;
+  min-height: 100vh;
 }
 
 .title {
@@ -115,8 +126,10 @@ main {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  max-width: 100%;
+  padding: 1rem 0;
 }
 
 /* Glow specific styles */
@@ -257,9 +270,11 @@ button[data-glow]:hover span {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  gap: 3rem;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  padding: 2rem 1rem 4rem 1rem;
+  gap: 2rem;
 }
 
 .project-title {
@@ -297,15 +312,17 @@ button[data-glow]:hover span {
   --spread: 0;
   --size: 150;
   position: relative;
-  padding: 1rem 3rem;
-  font-size: 1.2rem;
-  font-weight: 600;
+  padding: 1.25rem 3.5rem;
+  font-size: 1.3rem;
+  font-weight: 700;
   border-radius: calc(var(--radius) * 1px);
   cursor: pointer;
   transition: all 0.3s ease;
-  background: hsl(0 0% 10%);
-  border: 2px solid hsl(0 0% 30%);
-  color: hsl(0 0% 80%);
+  background: hsl(0 0% 15%);
+  border: 3px solid hsl(0 0% 40%);
+  color: hsl(0 0% 95%);
+  margin-top: 2rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
 }
 
 /* Override glow colors for back button to be white */
@@ -347,8 +364,9 @@ button[data-glow]:hover span {
 
 .back-button:hover {
   transform: translateY(-5px);
-  box-shadow: 0 1rem 2rem rgba(255, 255, 255, 0.1);
-  border-color: hsl(0 0% 60%);
+  box-shadow: 0 1rem 2.5rem rgba(255, 255, 255, 0.2);
+  border-color: hsl(0 0% 70%);
+  background: hsl(0 0% 20%);
 }
 
 .back-button .back-text {
