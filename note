@@ -1,0 +1,6 @@
+- integrasi dengan weather API (openweatherapp)
+- tambahkan icon cuaca yang sesuai dengan kondisi cuaca
+- tambahkan informasi wind speed, pressure, dll
+- error handling jika nama kota tidak ditemukan
+- loading state
+- 
