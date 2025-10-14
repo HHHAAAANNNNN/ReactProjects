@@ -1,6 +1,6 @@
-- integrasi dengan weather API (openweatherapp)
-- tambahkan icon cuaca yang sesuai dengan kondisi cuaca
-- tambahkan informasi wind speed, pressure, dll
-- error handling jika nama kota tidak ditemukan
-- loading state
-- 
+Weather app:
+- deteksi lokasi user otomatis
+- switch toggle mengganti celsius ke fahrenheit
+- simpan kota favorit
+- background animation
+

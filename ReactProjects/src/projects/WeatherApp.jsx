@@ -1,15 +1,40 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 const WeatherApp = () => {
   const [city, setCity] = useState('');
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [isCelsius, setIsCelsius] = useState(true);
   const inputRef = useRef(null);
 
   // OpenWeatherMap API key - Replace with your own key
   const API_KEY = '65252b2889710569a9de7a8df0cc0560';
   const API_URL = 'https://api.openweathermap.org/data/2.5/weather';
+
+  // Auto-hide error after 2 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError('');
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
+  const celsiusToFahrenheit = (celsius) => {
+    return Math.round((celsius * 9/5) + 32);
+  };
+
+  const getDisplayTemp = (tempCelsius) => {
+    return isCelsius ? tempCelsius : celsiusToFahrenheit(tempCelsius);
+  };
+
+  const getTempUnit = () => {
+    return isCelsius ? '°C' : '°F';
+  };
 
   const getWeatherIcon = (iconCode) => {
     // Map OpenWeatherMap icon codes to emoji
@@ -78,6 +103,82 @@ const WeatherApp = () => {
     }
   };
 
+  const getCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setLocationLoading(true);
+    setError('');
+    setWeather(null);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+          const response = await fetch(
+            `${API_URL}?lat=${latitude}&lon=${longitude}&appid=${API_KEY}&units=metric`
+          );
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch weather for your location');
+          }
+
+          const data = await response.json();
+          
+          setWeather({
+            city: data.name,
+            country: data.sys.country,
+            temp: Math.round(data.main.temp),
+            feelsLike: Math.round(data.main.feels_like),
+            condition: data.weather[0].main,
+            description: data.weather[0].description,
+            icon: getWeatherIcon(data.weather[0].icon),
+            humidity: data.main.humidity,
+            pressure: data.main.pressure,
+            windSpeed: data.wind.speed,
+            windDeg: data.wind.deg,
+            clouds: data.clouds.all,
+            visibility: data.visibility / 1000,
+            sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+            sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+          });
+          
+          setCity(data.name);
+        } catch (err) {
+          setError(err.message || 'Failed to fetch weather data');
+        } finally {
+          setLocationLoading(false);
+        }
+      },
+      (err) => {
+        setLocationLoading(false);
+        switch (err.code) {
+          case err.PERMISSION_DENIED:
+            setError('Location access denied. Please enable location permissions.');
+            break;
+          case err.POSITION_UNAVAILABLE:
+            setError('Location information unavailable.');
+            break;
+          case err.TIMEOUT:
+            setError('Location request timed out.');
+            break;
+          default:
+            setError('An error occurred while fetching location.');
+        }
+      }
+    );
+  };
+
+  const resetWeather = () => {
+    setCity('');
+    setWeather(null);
+    setError('');
+    setLoading(false);
+    setLocationLoading(false);
+  };
+
   return (
     <div className="project-content">
       <h2>Weather App</h2>
@@ -91,8 +192,24 @@ const WeatherApp = () => {
             onKeyPress={handleKeyPress}
             placeholder="Enter city name..."
           />
-          <button onClick={searchWeather} disabled={loading}>
+          <button onClick={searchWeather} disabled={loading || locationLoading}>
             {loading ? '⏳ Loading...' : '🔍 Search'}
+          </button>
+          <button 
+            onClick={getCurrentLocation} 
+            disabled={loading || locationLoading}
+            className="location-button"
+            title="Use my location"
+          >
+            {locationLoading ? '⏳' : '📍'}
+          </button>
+          <button 
+            onClick={resetWeather} 
+            disabled={loading || locationLoading}
+            className="reset-button"
+            title="Reset"
+          >
+            ✕
           </button>
         </div>
 
@@ -110,14 +227,21 @@ const WeatherApp = () => {
                 <h3>{weather.city}, {weather.country}</h3>
                 <p className="weather-description">{weather.description}</p>
               </div>
+              <button 
+                onClick={() => setIsCelsius(!isCelsius)} 
+                className="temp-toggle"
+                title="Toggle temperature unit"
+              >
+                {isCelsius ? '°F' : '°C'}
+              </button>
             </div>
 
             <div className="weather-main">
               <div className="temp-display">
-                <span className="temp-value">{weather.temp}</span>
-                <span className="temp-unit">°C</span>
+                <span className="temp-value">{getDisplayTemp(weather.temp)}</span>
+                <span className="temp-unit">{getTempUnit()}</span>
               </div>
-              <p className="feels-like">Feels like {weather.feelsLike}°C</p>
+              <p className="feels-like">Feels like {getDisplayTemp(weather.feelsLike)}{getTempUnit()}</p>
             </div>
 
             <div className="weather-details">

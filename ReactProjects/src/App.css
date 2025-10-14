@@ -612,6 +612,8 @@ button[data-glow]:hover span {
   color: hsl(0 0% 90%);
   font-size: 1rem;
   transition: all 0.3s ease;
+  height: 48px;
+  box-sizing: border-box;
 }
 
 .weather-search input:focus,
@@ -619,6 +621,70 @@ button[data-glow]:hover span {
   outline: none;
   border-color: hsl(180 70% 50%);
   box-shadow: 0 0 0 3px hsl(180 70% 50% / 0.1);
+}
+
+.weather-search button,
+.gif-search button {
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.location-button {
+  padding: 0.75rem 1.25rem;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  border: 2px solid hsl(0 0% 25%);
+  background: hsl(0 0% 15%);
+  color: hsl(0 0% 90%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.location-button:hover:not(:disabled) {
+  background: hsl(180 70% 20%);
+  border-color: hsl(180 70% 50%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+.location-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reset-button {
+  padding: 0.75rem 1.25rem;
+  font-size: 1.3rem;
+  border-radius: 8px;
+  border: 2px solid hsl(0 0% 25%);
+  background: hsl(0 0% 15%);
+  color: hsl(0 0% 90%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 48px;
+  box-sizing: border-box;
+}
+
+.reset-button:hover:not(:disabled) {
+  background: hsl(0 70% 20%);
+  border-color: hsl(0 70% 50%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+.reset-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .weather-error {
@@ -629,6 +695,40 @@ button[data-glow]:hover span {
   border: 1px solid hsl(0 70% 40%);
   text-align: center;
   font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+.weather-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  gap: 1.5rem;
+  background: hsl(0 0% 12%);
+  border-radius: 16px;
+  border: 1px solid hsl(0 0% 25%);
+  animation: fadeIn 0.3s ease;
+}
+
+.weather-loading p {
+  color: hsl(180 70% 60%);
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid hsl(0 0% 20%);
+  border-top: 5px solid hsl(180 70% 60%);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .weather-info {
@@ -680,6 +780,26 @@ button[data-glow]:hover span {
   font-size: 1.1rem;
   margin: 0;
   text-transform: capitalize;
+}
+
+.temp-toggle {
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 2px solid hsl(180 70% 50%);
+  background: hsl(180 70% 15%);
+  color: hsl(180 70% 80%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 50px;
+}
+
+.temp-toggle:hover {
+  background: hsl(180 70% 20%);
+  border-color: hsl(180 70% 60%);
+  transform: scale(1.05);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 200, 200, 0.3);
 }
 
 .weather-main {
