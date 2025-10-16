@@ -737,6 +737,7 @@ button[data-glow]:hover span {
   border-radius: 16px;
   border: 1px solid hsl(0 0% 25%);
   animation: fadeIn 0.5s ease;
+  transition: background 1s ease;
 }
 
 @keyframes fadeIn {

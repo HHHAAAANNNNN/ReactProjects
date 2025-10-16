@@ -36,6 +36,20 @@ const WeatherApp = () => {
     return isCelsius ? '°C' : '°F';
   };
 
+  const getBackgroundGradient = (temp) => {
+    // Determine gradient based on temperature (in Celsius)
+    if (temp >= 25) {
+      // Hot weather: Black to Orange gradient
+      return 'linear-gradient(to bottom, hsl(0 0% 8%), hsl(25 90% 35%))';
+    } else if (temp >= 15) {
+      // Moderate weather: Black to Yellow-Orange gradient
+      return 'linear-gradient(to bottom, hsl(0 0% 8%), hsl(40 80% 30%))';
+    } else {
+      // Cold weather: Black to Blue gradient
+      return 'linear-gradient(to bottom, hsl(0 0% 8%), hsl(210 80% 30%))';
+    }
+  };
+
   const getWeatherIcon = (iconCode) => {
     // Map OpenWeatherMap icon codes to emoji
     const iconMap = {
@@ -220,7 +234,10 @@ const WeatherApp = () => {
         )}
 
         {weather && (
-          <div className="weather-info">
+          <div 
+            className="weather-info" 
+            style={{ background: getBackgroundGradient(weather.temp) }}
+          >
             <div className="weather-header">
               <div className="weather-icon">{weather.icon}</div>
               <div className="weather-location">
