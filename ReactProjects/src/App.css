@@ -491,6 +491,22 @@ button[data-glow]:hover span {
   margin-top: 0rem;
 }
 
+.empty-favorites {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 0 1rem;
+}
+
+.empty-favorites .empty-message {
+  max-width: 400px;
+  background: hsl(0 0% 12%);
+  border: 1px solid hsl(0 0% 20%);
+  padding: 2rem;
+  border-radius: 12px;
+}
+
 /* Notes App Specific */
 .notes-container {
   display: flex;
@@ -596,10 +612,41 @@ button[data-glow]:hover span {
   gap: 1.5rem;
 }
 
+.search-and-favorites {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .weather-search,
 .gif-search {
   display: flex;
   gap: 0.5rem;
+}
+
+.favorites-toggle-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid hsl(45 100% 50%);
+  background: hsl(45 100% 15%);
+  color: hsl(45 100% 80%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 48px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.favorites-toggle-btn:hover {
+  background: hsl(45 100% 20%);
+  border-color: hsl(45 100% 60%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(255, 200, 0, 0.3);
 }
 
 .weather-search input,
@@ -687,6 +734,169 @@ button[data-glow]:hover span {
   cursor: not-allowed;
 }
 
+.favorites-toggle-side {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid hsl(45 100% 50%);
+  background: hsl(45 100% 15%);
+  color: hsl(45 100% 80%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 48px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.favorites-toggle-side:hover {
+  background: hsl(45 100% 20%);
+  border-color: hsl(45 100% 60%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(255, 200, 0, 0.3);
+}
+
+.favorites-toggle {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 2px solid hsl(45 100% 50%);
+  background: hsl(45 100% 15%);
+  color: hsl(45 100% 80%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.favorites-toggle:hover {
+  background: hsl(45 100% 20%);
+  border-color: hsl(45 100% 60%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(255, 200, 0, 0.3);
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.favorite-card {
+  position: relative;
+  background: hsl(0 0% 12%);
+  border-radius: 10px;
+  border: 1px solid hsl(0 0% 25%);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.favorite-card:hover {
+  border-color: hsl(0 0% 40%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+.favorite-city-btn {
+  width: 100%;
+  padding: 1.25rem;
+  background: transparent;
+  border: none;
+  color: hsl(0 0% 90%);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.favorite-city-btn:hover {
+  background: hsl(0 0% 15%);
+}
+
+.favorite-city-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: hsl(180 70% 60%);
+}
+
+.favorite-country {
+  font-size: 0.9rem;
+  color: hsl(0 0% 60%);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.favorite-temp {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: hsl(0 0% 80%);
+  margin-top: 0.25rem;
+}
+
+.remove-favorite {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: hsl(0 70% 20%);
+  border: 1px solid hsl(0 70% 40%);
+  border-radius: 4px;
+  color: hsl(0 70% 90%);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.favorite-card:hover .remove-favorite {
+  opacity: 1;
+}
+
+.remove-favorite:hover {
+  background: hsl(0 70% 30%);
+  transform: scale(1.1);
+}
+
+.favorite-heart {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.5rem;
+  background: hsl(0 0% 10% / 0.8);
+  border: 2px solid hsl(0 0% 30%);
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.favorite-heart:hover {
+  transform: scale(1.15);
+  border-color: hsl(0 100% 60%);
+}
+
+.favorite-heart.favorited {
+  background: hsl(0 100% 20% / 0.9);
+  border-color: hsl(0 100% 60%);
+  animation: heartBeat 0.5s ease;
+}
+
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.2); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.15); }
+}
+
 .weather-error {
   background: hsl(0 70% 20%);
   color: hsl(0 70% 90%);
@@ -732,6 +942,7 @@ button[data-glow]:hover span {
 }
 
 .weather-info {
+  position: relative;
   background: hsl(0 0% 12%);
   padding: 2rem;
   border-radius: 16px;

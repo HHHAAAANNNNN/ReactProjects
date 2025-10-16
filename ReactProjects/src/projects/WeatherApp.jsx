@@ -7,6 +7,8 @@ const WeatherApp = () => {
   const [error, setError] = useState('');
   const [locationLoading, setLocationLoading] = useState(false);
   const [isCelsius, setIsCelsius] = useState(true);
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [favorites, setFavorites] = useState([]);
   const inputRef = useRef(null);
 
   // OpenWeatherMap API key - Replace with your own key
@@ -71,6 +73,7 @@ const WeatherApp = () => {
       setLoading(true);
       setError('');
       setWeather(null);
+      setShowFavorites(false); // Auto disable favorites view
 
       try {
         const response = await fetch(
@@ -126,6 +129,7 @@ const WeatherApp = () => {
     setLocationLoading(true);
     setError('');
     setWeather(null);
+    setShowFavorites(false); // Auto disable favorites view
 
     navigator.geolocation.getCurrentPosition(
       async (position) => {
@@ -191,13 +195,41 @@ const WeatherApp = () => {
     setError('');
     setLoading(false);
     setLocationLoading(false);
+    setShowFavorites(false);
+  };
+
+  const addToFavorites = () => {
+    if (weather && !favorites.some(fav => fav.city === weather.city)) {
+      setFavorites([...favorites, weather]);
+    }
+  };
+
+  const removeFromFavorites = (cityName) => {
+    setFavorites(favorites.filter(fav => fav.city !== cityName));
+  };
+
+  const isFavorite = () => {
+    return weather && favorites.some(fav => fav.city === weather.city);
+  };
+
+  const loadFavoriteCity = (favoriteWeather) => {
+    setWeather(favoriteWeather);
+    setCity(favoriteWeather.city);
+    setShowFavorites(false);
   };
 
   return (
     <div className="project-content">
-      <h2>Weather App</h2>
+      <h2>{showFavorites ? 'Favorite Cities' : 'Weather App'}</h2>
       <div className="weather-container">
         <div className="weather-search">
+          <button 
+            onClick={() => setShowFavorites(!showFavorites)} 
+            className="favorites-toggle-btn"
+            title={showFavorites ? 'Show Weather Search' : 'Show Favorite Cities'}
+          >
+            {showFavorites ? '🔙' : '⭐'}
+          </button>
           <input
             ref={inputRef}
             type="text"
@@ -227,18 +259,63 @@ const WeatherApp = () => {
           </button>
         </div>
 
-        {error && (
-          <div className="weather-error">
-            ❌ {error}
-          </div>
-        )}
+        {showFavorites ? (
+          favorites.length === 0 ? (
+            <div className="empty-favorites">
+              <p className="empty-message">No favorite cities yet. Add some by clicking ❤️ on weather results!</p>
+            </div>
+          ) : (
+            <div className="favorites-grid">
+              {favorites.map((fav, index) => (
+                <div key={index} className="favorite-card">
+                  <button 
+                    onClick={() => loadFavoriteCity(fav)}
+                    className="favorite-city-btn"
+                  >
+                    <span className="favorite-city-name">{fav.city}</span>
+                    <span className="favorite-country">{fav.country}</span>
+                    <span className="favorite-temp">{fav.temp}°C</span>
+                  </button>
+                  <button 
+                    onClick={() => removeFromFavorites(fav.city)}
+                    className="remove-favorite"
+                    title="Remove from favorites"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          )
+        ) : (
+          <>
+            {error && (
+              <div className="weather-error">
+                ❌ {error}
+              </div>
+            )}
 
-        {weather && (
-          <div 
-            className="weather-info" 
-            style={{ background: getBackgroundGradient(weather.temp) }}
-          >
-            <div className="weather-header">
+            {(loading || locationLoading) && (
+              <div className="weather-loading">
+                <div className="loading-spinner"></div>
+                <p>{locationLoading ? 'Getting your location...' : 'Searching for weather data...'}</p>
+              </div>
+            )}
+
+            {weather && (
+              <div 
+                className="weather-info" 
+                style={{ background: getBackgroundGradient(weather.temp) }}
+              >
+                <button 
+                  onClick={isFavorite() ? () => removeFromFavorites(weather.city) : addToFavorites}
+                  className={`favorite-heart ${isFavorite() ? 'favorited' : ''}`}
+                  title={isFavorite() ? 'Remove from favorites' : 'Add to favorites'}
+                >
+                  {isFavorite() ? '❤️' : '🤍'}
+                </button>
+
+                <div className="weather-header">
               <div className="weather-icon">{weather.icon}</div>
               <div className="weather-location">
                 <h3>{weather.city}, {weather.country}</h3>
@@ -329,8 +406,10 @@ const WeatherApp = () => {
           </div>
         )}
 
-        {!weather && !loading && !error && (
-          <p className="empty-message">Enter a city to see the weather</p>
+        {!weather && !loading && !locationLoading && !error && (
+          <p className="empty-message">Enter a city name or use 📍 to detect your location</p>
+        )}
+          </>
         )}
       </div>
     </div>
