@@ -1,6 +1,12 @@
-Weather app:
-<!-- - deteksi lokasi user otomatis
-- switch toggle mengganti celsius ke fahrenheit -->
-- simpan kota favorit
-- background animation
-
+Quiz App:
+- progress bar dalam bentuk bar
+- immediate feedback + penjelasan mengapa jawaban tersebut benar/salah
+- score grading
+- animasi fade in dan fade out saat ganti pertanyaan
+- random 5 questions dari bank soal yang ada (15 soal)
+- detailed results
+- percentage score
+- fetch soal dari API open trivia database
+- export results jadi PDF
+- Share ke sosial media
+- 
