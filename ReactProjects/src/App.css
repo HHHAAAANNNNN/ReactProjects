@@ -1409,6 +1409,37 @@ button[data-glow]:hover span {
   margin: 0;
 }
 
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+  width: 100%;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: 2px solid hsl(0 0% 25%);
+  background: hsl(0 0% 15%);
+  color: hsl(0 0% 70%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.toggle-btn:hover {
+  border-color: hsl(0 0% 35%);
+  transform: translateY(-2px);
+}
+
+.toggle-btn.active {
+  background: hsl(180 70% 20%);
+  border-color: hsl(180 70% 50%);
+  color: hsl(0 0% 100%);
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1452,23 +1483,294 @@ button[data-glow]:hover span {
   letter-spacing: 0.5px;
 }
 
-.restart-btn {
+.answer-history {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.answer-history::-webkit-scrollbar {
+  width: 8px;
+}
+
+.answer-history::-webkit-scrollbar-track {
+  background: hsl(0 0% 15%);
+  border-radius: 10px;
+}
+
+.answer-history::-webkit-scrollbar-thumb {
+  background: hsl(0 0% 30%);
+  border-radius: 10px;
+}
+
+.answer-history::-webkit-scrollbar-thumb:hover {
+  background: hsl(0 0% 40%);
+}
+
+.history-card {
+  background: hsl(0 0% 15%);
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+}
+
+.history-card.correct-card {
+  border-color: hsl(120 40% 30%);
+}
+
+.history-card.incorrect-card {
+  border-color: hsl(0 40% 30%);
+}
+
+.history-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.question-number {
+  font-weight: bold;
+  color: hsl(0 0% 70%);
+  font-size: 0.9rem;
+}
+
+.history-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-correct {
+  background: hsl(120 40% 25%);
+  color: hsl(120 70% 70%);
+}
+
+.badge-incorrect {
+  background: hsl(0 40% 25%);
+  color: hsl(0 70% 70%);
+}
+
+.history-question {
+  color: hsl(0 0% 90%);
+  font-size: 1rem;
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}
+
+.history-answers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.answer-item {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-size: 0.95rem;
+}
+
+.answer-item.user-correct {
+  background: hsl(120 40% 15%);
+  border-left: 3px solid hsl(120 60% 50%);
+}
+
+.answer-item.user-incorrect {
+  background: hsl(0 40% 15%);
+  border-left: 3px solid hsl(0 60% 50%);
+}
+
+.answer-item.correct-answer-item {
+  background: hsl(120 40% 15%);
+  border-left: 3px solid hsl(120 60% 50%);
+}
+
+.answer-label {
+  font-weight: 600;
+  color: hsl(0 0% 70%);
+  min-width: 120px;
+}
+
+.answer-text {
+  color: hsl(0 0% 90%);
+  flex: 1;
+}
+
+.history-time {
+  color: hsl(0 0% 60%);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  text-align: right;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.restart-btn,
+.export-btn {
   padding: 0.75rem 2rem;
   font-size: 1.1rem;
   border-radius: 8px;
-  border: 2px solid hsl(180 70% 50%);
-  background: hsl(180 70% 20%);
-  color: hsl(0 0% 100%);
+  border: 2px solid;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: bold;
-  margin-top: 1rem;
+  flex: 1;
+  max-width: 250px;
+}
+
+.restart-btn {
+  border-color: hsl(180 70% 50%);
+  background: hsl(180 70% 20%);
+  color: hsl(0 0% 100%);
 }
 
 .restart-btn:hover {
   background: hsl(180 70% 30%);
   transform: translateY(-2px);
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+}
+
+.export-btn {
+  border-color: hsl(280 70% 50%);
+  background: hsl(280 70% 20%);
+  color: hsl(0 0% 100%);
+}
+
+.export-btn:hover {
+  background: hsl(280 70% 30%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(138, 43, 226, 0.4);
+}
+
+/* Share Section */
+.share-section {
+  margin-top: 2.5rem;
+  padding: 2rem;
+  background: hsl(0 0% 10%);
+  border-radius: 12px;
+  border: 2px solid hsl(0 0% 20%);
+  width: 100%;
+}
+
+.share-title {
+  color: hsl(0 0% 90%);
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.share-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.share-btn {
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+}
+
+.share-icon {
+  font-size: 1.8rem;
+}
+
+.whatsapp-btn {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.whatsapp-btn:hover {
+  background: linear-gradient(135deg, #128C7E, #075E54);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(37, 211, 102, 0.3);
+}
+
+.facebook-btn {
+  background: linear-gradient(135deg, #1877F2, #0C63D4);
+}
+
+.facebook-btn:hover {
+  background: linear-gradient(135deg, #0C63D4, #084A9C);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(24, 119, 242, 0.3);
+}
+
+.x-btn {
+  background: linear-gradient(135deg, #1DA1F2, #0E71C8);
+}
+
+.x-btn:hover {
+  background: linear-gradient(135deg, #0E71C8, #0A5490);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(29, 161, 242, 0.3);
+}
+
+.copy-link-btn {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid hsl(40 70% 50%);
+  background: linear-gradient(135deg, hsl(40 70% 25%), hsl(40 70% 20%));
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.copy-link-btn:hover {
+  background: linear-gradient(135deg, hsl(40 70% 35%), hsl(40 70% 30%));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(255, 193, 7, 0.3);
+}
+
+/* Responsive for share buttons */
+@media (max-width: 768px) {
+  .share-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .share-btn {
+    flex-direction: row;
+    justify-content: center;
+    padding: 0.8rem;
+  }
+  
+  .share-icon {
+    font-size: 1.5rem;
+  }
 }
 
 /* Pomodoro Timer Specific */
