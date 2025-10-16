@@ -1,12 +1,12 @@
 Quiz App:
-- progress bar dalam bentuk bar
-- immediate feedback + penjelasan mengapa jawaban tersebut benar/salah
-- score grading
+<!-- - progress bar dalam bentuk bar -->
+<!-- - immediate feedback + penjelasan mengapa jawaban tersebut benar/salah -->
+- score grading (A jika diatas 90%; B diantara 80-90%; C diantara 70-80%; D diantara 60-70%; E diantara 50-60%; F dibawah 50%)
 - animasi fade in dan fade out saat ganti pertanyaan
-- random 5 questions dari bank soal yang ada (15 soal)
+<!-- - random 5 questions dari bank soal yang ada (15 soal) -->
 - detailed results
 - percentage score
-- fetch soal dari API open trivia database
+<!-- - fetch soal dari API open trivia database -->
 - export results jadi PDF
 - Share ke sosial media
 - 

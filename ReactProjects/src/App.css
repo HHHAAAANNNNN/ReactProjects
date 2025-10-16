@@ -1123,6 +1123,171 @@ button[data-glow]:hover span {
   padding: 2rem;
   border-radius: 12px;
   border: 1px solid hsl(0 0% 25%);
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.quiz-question {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  animation: fadeIn 0.5s ease;
+}
+
+.quiz-question.fade-out {
+  animation: fadeOut 0.5s ease forwards;
+}
+
+.quiz-question.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+}
+
+.quiz-question h3 {
+  color: hsl(0 0% 90%);
+  font-size: 1.5rem;
+  margin: 1rem 0 2rem 0;
+  word-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.6;
+  width: 100%;
+}
+
+.question-header {
+  color: hsl(0 0% 60%);
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.question-header > span {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: hsl(0 0% 20%);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, hsl(180 70% 50%), hsl(120 70% 50%));
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px hsla(180 70% 50% / 0.5);
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.quiz-option {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  width: 100%;
+  display: block;
+  word-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.4;
+  box-sizing: border-box;
+  white-space: normal;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.quiz-option:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.quiz-option.correct {
+  background: hsl(120 60% 25%) !important;
+  border-color: hsl(120 60% 50%) !important;
+  color: hsl(120 100% 90%);
+}
+
+.quiz-option.incorrect {
+  background: hsl(0 60% 25%) !important;
+  border-color: hsl(0 60% 50%) !important;
+  color: hsl(0 100% 90%);
+}
+
+.quiz-option.correct-answer {
+  background: hsl(120 40% 20%);
+  border-color: hsl(120 60% 40%);
+}
+
+.answer-icon {
+  position: absolute;
+  right: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.timer-indicator {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timer-indicator svg {
+  position: relative;
+}
+
+.timer-circle {
+  animation: countdown 2.5s linear forwards;
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 163.36;
+  }
+}
+
+.timer-text {
+  color: hsl(0 0% 70%);
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .quiz-loading {
@@ -1190,18 +1355,120 @@ button[data-glow]:hover span {
 
 .quiz-score {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2rem 0;
+  animation: fadeIn 0.5s ease;
 }
 
 .quiz-score h3 {
   color: hsl(0 0% 90%);
   font-size: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
-.quiz-score p {
-  font-size: 1.5rem;
-  color: hsl(120 60% 60%);
+.score-breakdown {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   margin-bottom: 2rem;
+}
+
+.grade-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.grade-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 6px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(0 0% 12%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.grade-letter {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.grade-message {
+  font-size: 1.25rem;
+  color: hsl(0 0% 70%);
+  margin: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  width: 100%;
+}
+
+.stat-card {
+  background: hsl(0 0% 15%);
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid hsl(0 0% 25%);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+  border-color: hsl(0 0% 35%);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: hsl(180 70% 50%);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value.correct {
+  color: hsl(120 60% 50%);
+}
+
+.stat-value.incorrect {
+  color: hsl(0 60% 50%);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: hsl(0 0% 60%);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.restart-btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  border: 2px solid hsl(180 70% 50%);
+  background: hsl(180 70% 20%);
+  color: hsl(0 0% 100%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.restart-btn:hover {
+  background: hsl(180 70% 30%);
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
 }
 
 /* Pomodoro Timer Specific */
