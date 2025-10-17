@@ -6,7 +6,7 @@ const QuizApp = () => {
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showFeedback, setShowFeedback] = useState(false);
@@ -15,6 +15,31 @@ const QuizApp = () => {
   const [fadeOut, setFadeOut] = useState(false);
   const [userAnswers, setUserAnswers] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
+  
+  // Quiz setup states
+  const [showSetup, setShowSetup] = useState(true);
+  const [quizStarted, setQuizStarted] = useState(false);
+  const [quizSettings, setQuizSettings] = useState({
+    amount: 10,
+    type: 'multiple',
+    category: '',
+    difficulty: ''
+  });
+  const [categories, setCategories] = useState([]);
+
+  // Fetch categories on component mount
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('https://opentdb.com/api_category.php');
+        const data = await response.json();
+        setCategories(data.trivia_categories);
+      } catch (err) {
+        console.error('Failed to fetch categories:', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   // Fetch questions from Open Trivia Database API with auto-retry
   const fetchQuestions = async (retryCount = 0) => {
@@ -22,17 +47,23 @@ const QuizApp = () => {
     setError(retryCount > 0 ? `Retrying... (Attempt ${retryCount + 1})` : '');
     
     try {
-      // Fetch 10 random questions (mixed difficulty and type)
-      const response = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
+      // Build API URL with settings
+      let apiUrl = `https://opentdb.com/api.php?amount=${quizSettings.amount}`;
+      if (quizSettings.type) apiUrl += `&type=${quizSettings.type}`;
+      if (quizSettings.category) apiUrl += `&category=${quizSettings.category}`;
+      if (quizSettings.difficulty) apiUrl += `&difficulty=${quizSettings.difficulty}`;
       
+      const response = await fetch(apiUrl);
+          
       if (!response.ok) {
         throw new Error('Failed to fetch questions');
       }
 
       const data = await response.json();
-      
-      if (data.response_code !== 0) {
-        throw new Error('No questions available');
+
+      const dataFetch = async (retryCountData = 0) => {
+        setLoading(true);
+        setError(retryCountData > 0 ? `Retrying... (Attempt ${retryCountData + 1})` : '');
       }
 
       // Format questions to match our structure
@@ -66,20 +97,22 @@ const QuizApp = () => {
       setError(''); // Clear error on success
       setLoading(false);
     } catch (err) {
-      // Auto-retry after 2 seconds
+      // Auto-retry after 1 second
       console.log(`Fetch failed (Attempt ${retryCount + 1}):`, err.message);
-      setError(`Connection failed. Retrying in 2 seconds... (Attempt ${retryCount + 1})`);
+      setError(`Connection failed. Retrying in 1 second... (Attempt ${retryCount + 1})`);
       
       setTimeout(() => {
         fetchQuestions(retryCount + 1); // Retry with incremented count
-      }, 2000);
+      }, 1000);
     }
   };
 
-  // Fetch questions on component mount
-  useEffect(() => {
+  // Start quiz with selected settings
+  const startQuiz = () => {
+    setShowSetup(false);
+    setQuizStarted(true);
     fetchQuestions();
-  }, []);
+  };
 
   // Check for shared results in URL
   useEffect(() => {
@@ -171,6 +204,17 @@ const QuizApp = () => {
     fetchQuestions(); // Fetch new questions when restarting
   };
 
+  const backToSetup = () => {
+    setShowSetup(true);
+    setQuizStarted(false);
+    setShowScore(false);
+    setCurrentQuestion(0);
+    setScore(0);
+    setQuestions([]);
+    setUserAnswers([]);
+    setAnswerTimes([]);
+  };
+
   // Generate shareable result text
   const getShareText = () => {
     const percentage = ((score / questions.length) * 100).toFixed(1);
@@ -209,6 +253,16 @@ const QuizApp = () => {
     const avgTime = answerTimes.length > 0 
       ? (answerTimes.reduce((a, b) => a + b, 0) / answerTimes.length).toFixed(1) 
       : '0';
+    
+    // Get quiz settings display values
+    const quizTypeDisplay = quizSettings.type === 'multiple' ? 'Multiple Choice' : 
+                           quizSettings.type === 'boolean' ? 'True/False' : 'Any Type';
+    const categoryDisplay = quizSettings.category ? 
+                           categories.find(cat => cat.id === parseInt(quizSettings.category))?.name || 'Any Category' 
+                           : 'Any Category';
+    const difficultyDisplay = quizSettings.difficulty ? 
+                             quizSettings.difficulty.charAt(0).toUpperCase() + quizSettings.difficulty.slice(1) 
+                             : 'Any Difficulty';
     
     // Create HTML content for PDF
     const htmlContent = `
@@ -377,6 +431,26 @@ const QuizApp = () => {
             <p>Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
           </div>
 
+          <div class="section-title">Quiz Information</div>
+          <div class="stats">
+            <div class="stat-box">
+              <div class="label">Number of Questions</div>
+              <div class="value">${quizSettings.amount}</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Question Type</div>
+              <div class="value">${quizTypeDisplay}</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Category</div>
+              <div class="value">${categoryDisplay}</div>
+            </div>
+            <div class="stat-box">
+              <div class="label">Difficulty</div>
+              <div class="value">${difficultyDisplay}</div>
+            </div>
+          </div>
+
           <div class="grade-section">
             <div class="grade-circle">${gradeInfo.grade}</div>
             <div class="grade-info">
@@ -404,6 +478,14 @@ const QuizApp = () => {
               <div class="value" style="color: #f44336;">${questions.length - score}</div>
             </div>
           </div>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
 
           <div class="section-title">Answer History</div>
           ${userAnswers.map((answer, index) => `
@@ -464,10 +546,7 @@ const QuizApp = () => {
       <div className="project-content">
         <h2>Quiz App</h2>
         <div className="quiz-container">
-          <div className="quiz-error">
-            <p>No questions available</p>
-            <button onClick={fetchQuestions}>Reload</button>
-          </div>
+            <button onClick={fetchQuestions}>You Ready?</button>
         </div>
       </div>
     );
@@ -477,8 +556,108 @@ const QuizApp = () => {
     <div className="project-content">
       <h2>Quiz App</h2>
       <div className="quiz-container">
-        {showScore ? (
+        {showSetup ? (
+          <div className="quiz-setup">
+            <div className="setup-header">
+              <h3>⚙️ Quiz Settings</h3>
+              <p>Customize your quiz before starting</p>
+            </div>
+
+            <form className="setup-form" onSubmit={(e) => { e.preventDefault(); startQuiz(); }}>
+              <div className="form-group">
+                <label className="form-label">Number of Questions</label>
+                <input
+                title='Number of Questions: Minimum 5, Maximum 50'
+                  type="number"
+                  className="form-input"
+                  min="5"
+                  max="50"
+                  value={quizSettings.amount}
+                  onChange={(e) => setQuizSettings({ ...quizSettings, amount: parseInt(e.target.value) || 10 })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Question Type</label>
+                <select
+                  className="form-select"
+                  value={quizSettings.type}
+                  onChange={(e) => setQuizSettings({ ...quizSettings, type: e.target.value })}
+                >
+                  <option value="">Any Type</option>
+                  <option value="multiple">Multiple Choice</option>
+                  <option value="boolean">True / False</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Category</label>
+                <select
+                  className="form-select"
+                  value={quizSettings.category}
+                  onChange={(e) => setQuizSettings({ ...quizSettings, category: e.target.value })}
+                >
+                  <option value="">Any Category</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Difficulty</label>
+                <select
+                  className="form-select"
+                  value={quizSettings.difficulty}
+                  onChange={(e) => setQuizSettings({ ...quizSettings, difficulty: e.target.value })}
+                >
+                  <option value="">Any Difficulty</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+
+              <button type="submit" className="start-quiz-btn">
+                🚀 Start Quiz
+              </button>
+            </form>
+          </div>
+        ) : showScore ? (
           <div className="quiz-score">
+            {/* Quiz Settings Info */}
+            {!new URLSearchParams(window.location.search).get('score') && (
+              <div className="quiz-info">
+                <div className="info-item">
+                  <span className="info-label">Questions:</span>
+                  <span className="info-value">{quizSettings.amount}</span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Type:</span>
+                  <span className="info-value">
+                    {quizSettings.type === 'multiple' ? 'Multiple Choice' : 
+                     quizSettings.type === 'boolean' ? 'True/False' : 'Any Type'}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Category:</span>
+                  <span className="info-value">
+                    {quizSettings.category ? 
+                      categories.find(cat => cat.id === parseInt(quizSettings.category))?.name || 'Any Category' 
+                      : 'Any Category'}
+                  </span>
+                </div>
+                <div className="info-item">
+                  <span className="info-label">Difficulty:</span>
+                  <span className="info-value">
+                    {quizSettings.difficulty ? 
+                      quizSettings.difficulty.charAt(0).toUpperCase() + quizSettings.difficulty.slice(1) 
+                      : 'Any Difficulty'}
+                  </span>
+                </div>
+              </div>
+            )}
+
             <h3>
               {new URLSearchParams(window.location.search).get('score') 
                 ? '👀 Shared Quiz Results' 
@@ -595,6 +774,7 @@ const QuizApp = () => {
             {!new URLSearchParams(window.location.search).get('score') && (
               <>
                 <div className="action-buttons">
+                  <button onClick={backToSetup} className="setup-btn">⚙️ New Quiz</button>
                   <button onClick={resetQuiz} className="restart-btn">🔄 Restart Quiz</button>
                   <button onClick={exportToPDF} className="export-btn">📄 Export to PDF</button>
                 </div>
@@ -616,9 +796,6 @@ const QuizApp = () => {
                       X (Twitter)
                     </button>
                   </div>
-                  <button onClick={copyResultLink} className="copy-link-btn">
-                    🔗 Copy Result Link
-                  </button>
                 </div>
               </>
             )}
